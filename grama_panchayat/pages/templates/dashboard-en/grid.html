@@ -1,0 +1,139 @@
+{% extends 'dash_base.html' %}
+{% block content %}
+<div class="content">
+    <h1>Welcome Admin!</h1>
+
+    <form id="sliderForm">
+        <div class="form-group">
+            <label for="Grid_Title">Gri Title</label>
+            <input type="hidden" id="id" name="id">
+            <input type="text" class="form-control" name="Grid_Title" id="Grid_Title">
+        </div>
+        <div class="form-group">
+            <label for="content_moving">Is content moving?</label>
+            <input type="checkbox" class="" name="content_moving" id="content_moving">
+        </div>
+        <button type="submit" class="btn btn-active btn-primary">Save</button>
+    </form>
+
+    <table class="table" id="sliderTable">
+        <thead>
+            <tr>
+                <td>Title</td>
+                <td>Content Moving</td>
+                <td>Action</td>
+            </tr>
+
+        </thead>
+        <tbody >
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+
+
+<script>
+    
+    
+    
+    const table = $('#sliderTable').DataTable({
+        ajax:{
+                url:'/api/GridViewset/',
+                dataSrc: ''
+            },
+        columns:[
+            {
+                data: "Grid_Title",
+                
+            },
+            {
+                data: "content_moving"
+            },
+            {
+                data: id,
+                render: function(id, row, data){
+                    return `
+                        <button class="btn edit btn-active btn-primary" data-row='${JSON.stringify(data)}'>Edit</button>
+                        <button class="btn btn-active btn-danger delete" data-row="${data.id}">Delete</button>
+                    
+                    `
+                }
+            }
+        ],
+        language: {
+            lengthMenu: "_MENU_",
+            search: "",
+            searchPlaceholder: "Search..."
+        },
+        
+    })
+
+    jQuery('#sliderForm').submit(function(e){
+        e.preventDefault()
+        e.stopImmediatePropagation()
+        const data = new FormData(document.getElementById('sliderForm'));
+
+        let button = $(this).find('button').text()
+        console.log(button)
+        let url =  '/api/GridViewset/';
+        let method = 'POST'
+        if(button == 'Update'){
+            method = 'PUT';
+            let id = $('#id').val();
+            url = '/api/GridViewset/' + id + '/'
+        }
+
+        jQuery.ajax({
+            url: url,
+            method: method,
+            data: data,
+            contentType:false,
+            processData: false,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-CSRFToken', $.cookie('csrftoken'))
+            }
+        }).done(resp=>{
+            table.ajax.reload();
+            
+            console.log('updated')
+        }).fail(err=>console.log(err))
+    })
+
+    jQuery('#sliderTable tbody').on('click', '.edit',function(){
+        let data =  $(this).data('row')
+        const inputs = $('#sliderForm input')
+        for(let i=0; i < inputs.length; i++){
+            let name = $(inputs[i]).attr('name')
+            console.log(name)
+            if(name != 'content_moving'){
+
+                $(`input[name="${name}"]`).val(data[name])
+            }
+        }
+        if(data.content_moving){
+            console.log('I am here')
+            $('#content_moving').attr('checked', true);
+        }
+        jQuery('#sliderForm button').text('Update')
+    })
+    jQuery('#sliderTable tbody').on('click', '.delete',function(){
+        let data = JSON.parse($(this).data('row'))
+        jQuery.ajax({
+            url: '/api/GridViewset/'+data+'/',
+            method: 'delete',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-CSRFToken', $.cookie('csrftoken'))
+            }
+        }).done(resp=>{
+            table.ajax.reload();
+        }).fail(err=>{console.log(err)})
+    })
+    
+</script>
+
+{% endblock script %}
+

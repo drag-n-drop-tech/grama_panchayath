@@ -25,4 +25,11 @@ class firstPageGridContent(models.Model):
     isNew = models.BooleanField(default=False)
     url = models.CharField(max_length=50)
 
+class News(models.Model):
+    title = models.CharField(max_length=100)
+    image = models.FileField(upload_to="")
+    short_description = models.CharField(max_length=255)
+    detailed_description = models.TextField(null=True, blank=True)
+
+
 

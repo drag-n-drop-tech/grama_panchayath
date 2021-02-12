@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Slider_Images_Model,firstPageGridContent,firstPageGrid
+from .models import Slider_Images_Model,firstPageGridContent,firstPageGrid, News
 
 
 
@@ -35,4 +35,7 @@ def library(request):
     return render(request, 'website-kn/library.html')
 
 def others(request):
-    return render(request, 'website-kn/othres.html')
+    context = {}
+    news = News.objects.all()
+    context['newses'] = news
+    return render(request, 'website-kn/othres.html', context)

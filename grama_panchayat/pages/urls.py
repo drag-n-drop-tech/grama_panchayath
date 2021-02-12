@@ -1,9 +1,20 @@
 from django.urls import path, include
-
+from rest_framework import routers
 from . import views,dashboardViews
+from .api import addImages, GridViewset, newsViewSet
+
+
+
+router = routers.DefaultRouter()
+router.register('add_slider', addImages, 'add_slider')
+router.register('GridViewset', GridViewset, 'GridViewset')
+router.register('newsViewSet', newsViewSet, 'newsViewSet')
+
 
 urlpatterns = [
-    
+    ### apis ###
+    path('api/', include(router.urls)),
+    #######
     path('', views.index, name="index_page"),
     path('about-us', views.about_us, name="about_us"),
     path('members', views.members, name="members"),
@@ -17,4 +28,7 @@ urlpatterns = [
     #doshboard URLs
 
     path('dashboard',dashboardViews.dashboard,name="dashbaord"),
+    path('slider',dashboardViews.slider,name="slider"),
+    path('grid',dashboardViews.grid,name="grid"),
+    path('news',dashboardViews.news,name="news"),
 ]

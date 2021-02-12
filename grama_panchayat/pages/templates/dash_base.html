@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="{% static 'dashboard/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
   <!-- JQVMap -->
   <link rel="stylesheet" href="{% static 'dashboard/plugins/jqvmap/jqvmap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'dashboard/dist/css/dataTable.css' %}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'dashboard/dist/css/adminlte.min.css' %}">
   <!-- overlayScrollbars -->
@@ -93,7 +94,11 @@
 <script src="{% static 'dashboard/dist/js/adminlte.js' %}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'dashboard/dist/js/demo.js' %}"></script>
+<script src="{% static 'dashboard/dist/js/dataTable.js' %}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{% static 'dashboard/dist/js/pages/dashboard.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous"></script>
+{% block script %}
+{% endblock script%}
 </body>
 </html>
